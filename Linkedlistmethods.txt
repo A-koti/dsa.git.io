@@ -1,0 +1,245 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct node {
+    int data;
+    struct node* link;
+};
+struct node* top = NULL;
+
+void push(int data) {
+    struct node* new = malloc(sizeof(struct node));
+    new->data = data;
+    new->link = NULL;
+    if (new == NULL) {
+        printf("Cannot push the Element\n");
+    }
+    new->link = top;
+    top = new;
+}
+
+void pop() {
+    if (top == NULL) {
+        printf("Stack underflow\n");
+    } else {
+        struct node* temp = top;
+        int item = temp->data;
+        top = top->link;
+        free(temp);
+        printf("Popped item: %d\n", item);
+    }
+}
+
+void peak() {
+    if (top == NULL) {
+        printf("Stack underflow\n");
+    } else {
+        printf("The topmost element is %d\n", top->data);
+    }
+}
+
+void display() {
+    if (top == NULL) {
+        printf("Stack is empty\n");
+    } else {
+        struct node* temp = top;
+        printf("Stack elements:\n");
+        while (temp != NULL) {
+            printf("%d\n", temp->data);
+            temp = temp->link;
+        }
+    }
+}
+
+void getminElement() {
+    if (top == NULL) {
+        printf("Stack is Empty\n");
+    } else {
+        int min = top->data;
+        struct node* temp = top;
+        while (temp != NULL) {
+            if (temp->data < min) {
+                min = temp->data;
+            }
+            temp = temp->link;
+        }
+        printf("The Minimum Element is %d\n", min);
+    }
+}
+
+struct node* copystack() {
+    if (top == NULL) {
+        printf("Empty Stack");
+    }
+    struct node* newstack = NULL;
+    struct node* temp = top;
+    while (temp != NULL) {
+        struct node* newnode = malloc(sizeof(struct node));
+        newnode->data = temp->data;
+        newnode->link = newstack;
+        newstack = newnode;
+        temp = temp->link;
+    }
+    return newstack;
+}
+
+
+
+struct node* reverseString(const char* input) {
+    int i = 0;
+    while (input[i] != '\0') {
+        push(input[i]);
+        i++;
+    }
+    
+    return top;
+}
+
+void removeMiddle() {
+    if (top == NULL)
+        return;
+    struct node* slowPtr = top;
+    struct node* fastPtr = top;
+    struct node* prev = NULL;
+
+    while (fastPtr != NULL && fastPtr->link != NULL) {
+        prev = slowPtr;
+        slowPtr = slowPtr->link;
+        fastPtr = fastPtr->link->link;
+    }
+
+    if (slowPtr != NULL) {
+        if (prev != NULL)
+            prev->link = slowPtr->link;
+        else
+            top = slowPtr->link;
+        free(slowPtr);
+    }
+}
+
+
+
+void sortstack() {
+    if (top->link == NULL) {
+        return;
+    }
+
+    int swapped;
+    struct node* temp;
+    struct node* prev = NULL;
+
+    do {
+        swapped = 0;
+        temp = top;
+
+        while (temp->link != prev) {
+            if (temp->data > temp->link->data) {
+                int tempData = temp->data;
+                temp->data = temp->link->data;
+                temp->link->data = tempData;
+                swapped = 1;
+            }
+            temp = temp->link;
+        }
+        prev = temp;
+    } while (swapped);
+}
+int main() {
+    int n, data, x;
+    printf("Enter the number of elements to be pushed into the stack: ");
+    scanf("%d", &n);
+    printf("Enter the elements to push:\n");
+    for (int i = 1; i <= n; i++) {
+        scanf("%d", &data);
+        push(data);
+    }
+
+    while (1) {
+        printf("\nEnter your choice:\n");
+        printf("1. Push element\n");
+        printf("2. Pop element\n");
+        printf("3. Peak element\n");
+        printf("4. Minimum Element\n");
+        printf("5. Copy Stack\n");
+        printf("6. Reverse String\n");
+        printf("7. Middle Element\n");
+        printf("8. Sort Stack\n");
+        printf("9. Exit\n");
+        scanf("%d", &x);
+
+        switch (x) {
+            case 1:
+                printf("Enter the number of elements to push into the stack: ");
+                scanf("%d", &n);
+                printf("Enter the elements to push:\n");
+                for (int i = 1; i <= n; i++) {
+                    scanf("%d", &data);
+                    push(data);
+                }
+                display();
+                break;
+
+            case 2:
+                pop();
+                printf("The Elements in stack:");
+                display();
+                break;
+
+            case 3:
+                peak();
+                printf("The Elements in stack:");
+                break;
+
+            case 4:
+                getminElement();
+                break;
+
+            case 5: {
+                struct node* newstack = copystack();
+                printf("The Elements in copied stack:\n");
+                struct node* temp = newstack;
+                while (temp != NULL) {
+                    printf("%d\n", temp->data);
+                    temp = temp->link;
+                }
+                break;
+            }
+
+            case 6: {
+                char input[100];
+                printf("Enter a string: ");
+                scanf("%s", input);
+                struct node* reversedStack = reverseString(input);
+				printf("Reversed string: ");
+				while (reversedStack != NULL) {
+					printf("%c", reversedStack->data);
+					reversedStack = reversedStack->link;
+				}
+				printf("\n");
+                break;
+            }
+			
+			case 7:
+				removeMiddle();
+				printf("Middle element removed from the stack.\n");
+				display();
+				break;
+
+			case 8:
+				sortstack();
+				printf("The Sorted Stack\n");
+				display();
+				break;
+				 
+            case 9:
+                printf("Terminating the program.\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice\n");
+                break;
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,38 @@
+void infix_to_postfix() {
+    int j = 0;
+    int symbol, next;
+    for (int i = 0; i < strlen(infix); i++) {
+        symbol = infix[i];
+        if (!space(symbol)) {
+            switch (symbol) {
+                case '(':
+                    push(symbol);
+                    break;
+
+                case ')':
+                    while ((next = pop()) != '(') {
+                        postfix[j++] = next;
+                    }
+                    break;
+
+                case '+':
+                case '-':
+                case '/':
+                case '*':
+                case '^':
+                    while (!isEmpty() && precedence(stack[top]) >= precedence(symbol)) {
+                        postfix[j++] = pop();
+                    }
+                    push(symbol);
+                    break;
+
+                default:
+                    postfix[j++] = symbol;
+            }
+        }
+    }
+    while (!isEmpty()) {
+        postfix[j++] = pop();
+    }
+    postfix[j] = '\0';
+}

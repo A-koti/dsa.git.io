@@ -1,0 +1,304 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *link;
+};
+
+struct node *tail = NULL;
+
+void printlist(struct node *tail) {
+    if (tail == NULL) {
+        printf("Empty");
+        return;
+    }
+
+    struct node *p = tail->link;
+    
+    do {
+        printf(" %d ", p->data);
+        p = p->link;
+    } while (p != tail->link);
+}
+
+void insertionatbeginning(int swap) {
+    struct node *new = malloc(sizeof(struct node));
+    new->data = swap;
+    new->link = NULL;
+    
+    if (tail == NULL) {
+        tail = new;
+        tail->link = new;
+    } else {
+        new->link = tail->link;
+        tail->link = new;
+    }
+}
+
+void insertionatend(int swap) {
+    struct node *new = malloc(sizeof(struct node));
+    new->data = swap;
+    new->link = NULL;
+    
+    if (tail == NULL) {
+        tail = new;
+        tail->link = new;
+    } else {
+        new->link = tail->link;
+        tail->link = new;
+        tail = new;
+    }
+}
+
+void specificpositioninsert(int swap, int position) {
+	struct node *new = malloc(sizeof(struct node));
+    new->data = swap;
+    new->link = NULL;
+    struct node *p=tail->link;
+    int count=1;
+    while(count!=(position-1)){
+		p= p->link;
+		count++;
+		}
+	new->link=p->link;
+	p->link=new;
+	if(p == tail)
+	{
+		tail=tail->link;
+	}
+	
+}
+
+void deletionatstart() {
+    if (tail == NULL) {
+        printf("List is empty");
+        return;
+    }
+    
+    if (tail->link == tail) {
+        free(tail);
+        tail = NULL;
+        return;
+    }
+    
+    struct node *temp = tail->link;
+    tail->link = temp->link;
+    free(temp);
+}
+
+void deletionatend() {
+    if (tail == NULL) {
+        printf("Empty");
+        return;
+    }
+    
+    if (tail->link == tail) {
+        free(tail);
+        tail = NULL;
+        return;
+    }
+    
+    struct node *temp = tail->link;
+    
+    while (temp->link != tail) {
+        temp = temp->link;
+    }
+    
+    temp->link = tail->link;
+    free(tail);
+    tail = temp;
+}
+
+void deletingatposition(int position) {
+    if (tail == NULL) {
+        printf("List is empty");
+        return;
+    }
+    
+    if (position == 1) {
+        deletionatstart();
+        return;
+    }
+    
+    struct node *ptr = tail->link;
+    struct node *prev = tail;
+    int count = 1;
+    
+    while (ptr != tail && count < position) {
+        prev = ptr;
+        ptr = ptr->link;
+        count++;
+    }
+    
+    if (ptr == tail && count == position) {
+        deletionatend();
+    } else if (count == position) {
+        prev->link = ptr->link;
+        free(ptr);
+    } else {
+        printf("Invalid position\n");
+    }
+}
+
+
+void count_of_nodes() {
+    int count = 0;
+    
+    if (tail == NULL) {
+        printf("Empty");
+        return;
+    }
+    
+    struct node *ptr = tail->link;
+    
+    do {
+        count++;
+        ptr = ptr->link;
+    } while (ptr != tail->link);
+    
+    printf("%d\n", count);
+}
+
+struct node *reverse(struct node *tail)
+{
+    if (tail == NULL)
+    {
+        printf("Empty");
+    }
+    else
+    {
+        struct node *prev = tail;
+        struct node *current = tail->link;
+        struct node *next;
+        
+        do
+        {
+            next = current->link;
+            current->link = prev;
+            prev = current;
+            current = next;
+        } while (current != temp);
+        
+        
+        tail = current;
+    }
+    
+    return tail;
+}
+
+int main() {
+    int swap;
+    printf("Enter the elements of the linked list (To terminate the list, enter 00):\n");
+    
+    while (1) {
+        scanf("%d", &swap);
+        
+        if (swap == 00) {
+            break;
+        }
+        
+        insertionatend(swap);
+    }
+    
+    printf("The Elements in the linked list:\n");
+    printlist(tail);
+    printf("\n\n");
+    
+    int n;
+    while (1) {
+        printf("Enter the case:\n");
+        printf("1. Insertion at the beginning\n");
+        printf("2. Insertion at the end\n");
+        printf("3. Insertion at a specific position\n");
+        printf("4. Deletion at the start\n");
+        printf("5. Deletion at the end\n");
+        printf("6. Deletion at a specific position\n");
+        printf("7. Count of nodes\n");
+        printf("8. Reverse the list\n");
+        printf("9. Exit\n");
+        scanf("%d", &n);
+        
+        switch (n) {
+            case 1:
+                printf("\nCASE-1");
+                printf("\nEnter the number to be inserted at the beginning: ");
+                int a;
+                scanf("%d", &a);
+                insertionatbeginning(a);
+                printf("Linked list after insertion at the beginning: \n");
+                printlist(tail);
+                break;
+
+            case 2:
+                printf("\nCASE-2");
+                printf("\nEnter the element to be inserted at the end: ");
+                int s;
+                scanf("%d", &s);
+                insertionatend(s);
+                printf("Linked list after insertion at the end: \n");
+                printlist(tail);
+                break;
+
+            case 3:
+                printf("\nCASE-3");
+                printf("\nEnter the position for insertion: ");
+                int position1;
+                scanf("%d", &position1);
+                printf("\nEnter the number to be inserted: ");
+                int c;
+                scanf("%d", &c);
+                specificpositioninsert(c, position1);
+                printf("Linked list after insertion: \n");
+                printlist(tail);
+                break;
+
+            case 4:
+                printf("\nCASE-4");
+                deletionatstart();
+                printf("\nAfter deleting the first node: \n");
+                printlist(tail);
+                break;
+
+            case 5:
+                printf("\nCASE-5");
+                printf("\nAfter deleting the last node: \n");
+                deletionatend();
+                printlist(tail);
+                break;
+
+            case 6:
+                printf("\nCASE-6");
+                printf("\nEnter the node position: ");
+                int l;
+                scanf("%d", &l);
+                printf("After deleting the certain node: \n");
+               deletingatposition(l);
+                printlist(tail);
+                break;
+
+            case 7:
+                printf("\nCASE-7");
+                printf("\nLength of linked list: \n");
+                count_of_nodes();
+                break;
+
+            case 8:
+                printf("\nCASE-8");
+                printf("\nReversed list: \n");
+                tail = reverse(tail);
+                printlist(tail);
+                break;
+
+            case 9:
+                printf("\nTerminating the program.\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice");
+                break;
+        }
+    }
+    
+    return 0;
+}

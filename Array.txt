@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define max 10
+
+int stack_arr[max];
+int top = -1;
+
+void push(int data) {
+    if (top == max - 1) {
+        printf("Stack overflow\n");
+    } else {
+        top = top + 1;
+        stack_arr[top] = data;
+    }
+}
+
+void pop() {
+    if (top == -1) {
+        printf("Stack underflow\n");
+    } else {
+        int item = stack_arr[top];
+        top--;
+        printf("Popped item: %d\n", item);
+    }
+}
+
+void peak() {
+    if (top == -1) {
+        printf("Stack underflow\n");
+    } else {
+        printf("The topmost element is %d\n", stack_arr[top]);
+    }
+}
+
+void display() {
+    if (top == -1) {
+        printf("Stack is empty\n");
+    } else {
+        printf("Stack elements:\n");
+        for (int i = top; i >= 0; i--) {
+            printf("%d\n", stack_arr[i]);
+        }
+    }
+}
+
+int main() {
+    int n, data, x;
+    printf("Enter the number of elements to be pushed into the stack: ");
+    scanf("%d", &n);
+    printf("Enter the elements to push:\n");
+    for (int i = 1; i <= n; i++) {
+        scanf("%d", &data);
+        push(data);
+    }
+
+    while (1) {
+        printf("\nEnter your choice:\n");
+        printf("1. Push element\n");
+        printf("2. Pop element\n");
+        printf("3. Peak element\n");
+        printf("4. Exit\n");
+        scanf("%d", &x);
+
+        switch (x) {
+            case 1:
+                printf("Enter the number of elements to push into the stack: ");
+                scanf("%d", &n);
+                printf("Enter the elements to push:\n");
+                for (int i = 1; i <= n; i++) {
+                    scanf("%d", &data);
+                    push(data);
+                }
+                display();
+                break;
+
+            case 2:
+                pop();
+                printf("The Elements in stack:");
+                display();
+                break;
+
+            case 3:
+                peak();
+                printf("The Elements in stack:");
+                break;
+
+            case 4:
+                printf("Terminating the program.\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice\n");
+                break;
+        }
+    }
+    return 0;
+}

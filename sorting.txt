@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+	int data;
+	struct node* next;
+};
+struct node* add_next(struct node* tail, int data){
+	struct node* ptr=malloc(sizeof(struct node));
+	ptr->data=data;
+	if(tail==NULL){
+		tail=ptr;
+		tail->next=ptr;
+	}
+	else{
+		struct node* temp=tail->next;
+		tail->next=ptr;
+		tail=ptr;
+		tail->next=temp;
+	}
+	return tail;
+}
+struct node* sort(struct node*tail){
+	struct node* temp=tail->next;
+	struct node* temp1=tail->next;
+	int temp2;
+	do{
+		do{
+			if(temp->data<temp1->data){
+				temp2=temp->data;
+				temp->data=temp1->data;
+				temp1->data=temp2;
+			}
+			temp1=temp1->next;
+		}while(temp1!=tail->next);
+		temp=temp->next;
+	}while(temp!=tail->next);
+	return tail;
+}
+
+int main(){
+	struct node* tail=NULL;
+	int n;
+	scanf("%d",&n);	
+	printf("Enter your elements:");
+	for(int i=0;i<n;i++){
+		int data;
+		scanf("%d",&data);
+		tail=add_next(tail,data);
+	}
+	struct node* trav=tail->next;
+	do{
+		printf("%d ",trav->data);
+		trav=trav->next;
+	}while(trav!=tail->next);
+	tail=sort(tail);
+	printf("\n");
+	do{
+		printf("%d ",trav->data);
+		trav=trav->next;
+	}while(trav!=tail->next);
+		return 0;
+}
